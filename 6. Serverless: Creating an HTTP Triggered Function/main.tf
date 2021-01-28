@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("credentials.json")
+  credentials = file("Credential.json")
   project = "my-cloud-project" 
   region  = "europe-west1"
   zone    = "europe-west1-a"
