@@ -1,0 +1,268 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Course management API
+
+tags:
+- name: "get"
+- name: "put"
+- name: "delete"
+- name: "post"
+  
+paths:
+
+  /course:
+  
+    post:
+      tags:
+        - "post"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+      
+        '201':
+          description: "Status Code: 201 (Created)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+                
+        '422':
+          description: "Status Code: 422 (Unprocessable entity)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /courses:
+  
+    get:
+      tags:
+        - "get"    
+      parameters:
+      - in: query
+        name: course_type
+        schema:
+            type: string
+      - in: query
+        name: semester
+        schema:
+          type: string
+      responses:
+      
+        '200':
+          description: "Status Code: 200"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Courses'
+                  
+        '404':
+          description: "Status Code: 404 (Not Found)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'                
+
+  /course/{course_id}:
+  
+    get:
+      tags:
+        - "get"
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+      
+        '200':
+          description: "Status Code: 200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  code:
+                    type: string
+                  name:
+                    type: integer
+                  description:
+                    type: integer
+                  course_type:
+                    type: integer
+                  semester:
+                    type: integer 
+                  starting_date:
+                    type: integer
+                  ending_date:
+                    type: integer  
+                    
+        '404':
+          description: "Status Code: 404 (Not Found)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'                
+
+    put:
+      tags:
+        - "put"
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'    
+      responses:
+      
+        '200':
+          description: "Status Code: 200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+                
+        '404':
+          description: "Status Code: 404 (Not Found)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+        '422':
+          description: "Status Code: 422 (Unprocessable entity)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'                
+    delete:
+      tags:
+        - "delete"
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: string  
+      responses:
+        '204':
+          description: "Status Code: 204 (No Content)"
+          
+        '404':
+          description: "Status Code: 404 (Not Found)"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'                
+     
+
+components:
+  schemas:
+    Course:
+      type: object
+      required:
+        - code
+        - name
+        - course_type
+        - semester
+        - starting_date
+        - ending_date
+      properties:
+        id:
+            type: string
+            readOnly: true
+        code:
+            type: string
+            maxLength: 10
+        name:
+            type: string
+            maxLength: 20
+        description:
+            type: string
+            maxLength: 30
+        course_type:
+            type: string
+            enum:
+                - compulsory
+                - optional
+        semester:
+            type: string
+            enum:
+                - autumn
+                - spring
+        starting_date:
+            type: string
+            format: date-time
+        ending_date:
+            type: string
+            format: date-time
+      
+    Courses:
+      type: array
+      description: An array of courses
+      items:
+        $ref: '#/components/schemas/Course'
+    
+    Success:
+      type: object
+      properties:
+        message:
+          type: string
+        id:
+          type: string
+          
+    Error:
+      description: Invalid Request
+      type: object
+      properties:
+        message:
+          type: string
+          
