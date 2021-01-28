@@ -1,0 +1,33 @@
+image: python:latest
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  app_name: "someapp.py"
+
+
+before_script:
+  - python -V  # Print out python version for debugging
+
+pythonlint:
+  script:
+    - pip3 install pylint
+    - pip3 install -r flask_app/requirements.txt
+    - pylint flask_app/app.py --disable=missing-docstring
+
+
+pythontest:
+  script:
+    - pip3 install pytest
+    - pytest 
+
+pythoncompile:
+  script:
+    - python -m compileall
+
+pythonpackage:
+  script:
+    - pip3 install --user --upgrade setuptools wheel
+    - python setup.py sdist bdist_wheel
+    - cd dist
+    - pip install devops_test-0.0.1-py3-none-any.whl
