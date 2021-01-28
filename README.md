@@ -1,4 +1,4 @@
-# Cloud-Computing
+# Cloud-Computing Mini Projects
 
 The mini projects are displayed as follows:
 
