@@ -38,7 +38,7 @@ resource "google_cloudfunctions_function" "pubsub_triggered_function" {
 
   event_trigger {
     event_type = "providers/cloud.pubsub/eventTypes/topic.publish"
-    resource   = "projects/mthottoli-cloud-project/topics/user-input-text"
+    resource   = "projects/my-cloud-project/topics/user-input-text"
   }
 
 }
